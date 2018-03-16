@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  See
+  https://developer.android.com/studio/write/lint.html
+  http://tools.android.com/tips/lint/suppressing-lint-warnings
+  http://tools.android.com/tips/lint-checks
+-->
+
+<lint>
+    <issue id="PackageManagerGetSignatures" severity="ignore"/>
+    <issue id="Registered" severity="error" />
+    <issue id="ScrollViewCount" severity="error" />
+    <issue id="DuplicateIncludedIds" severity="error" />
+</lint>
