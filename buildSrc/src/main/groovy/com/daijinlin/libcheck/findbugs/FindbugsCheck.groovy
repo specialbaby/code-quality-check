@@ -3,6 +3,7 @@ package com.daijinlin.libcheck.findbugs
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
 import com.daijinlin.libcheck.common.CommonConfig
+import com.daijinlin.libcheck.common.L
 import com.daijinlin.libcheck.common.Utils
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.FindBugs
@@ -48,7 +49,7 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
 
     project.task('findbugs', type: FindBugs, dependsOn: 'assemble') {
       description = this.taskDescription
-      group = this.GROUP_VERIFICATION
+      group = this.verification
 
       boolean isJava = Utils.isJavaProject(project)
 //      classes = /*subProject.fileTree(findbugsClassesPath)*/
@@ -58,20 +59,15 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
         classes = project.files("$project.projectDir.absolutePath/build/intermediates/classes")
       }
       source = sources/*subProject.fileTree(extension.findbugs.source)*/
+      // empty classpath
       classpath = project.files()
 
       doLast {
         reports {
-          xml.enabled = true/*extension.xmlReports*/
+          xml.enabled = extension.xmlReports
           xml.destination project.file("$project.buildDir/reports/findbugs/findbugs.xml")
-          html.enabled = true/*extension.htmlReports*/
+          html.enabled = extension.htmlReports
           html.destination project.file("$project.buildDir/reports/findbugs/findbugs.html")
-//          xml {
-//            destination project.file("$project.buildDir/reports/findbugs/findbugs.xml")
-//          }
-//          html {
-//            destination project.file("$project.buildDir/reports/findbugs/findbugs.html")
-//          }
         }
       }
     }

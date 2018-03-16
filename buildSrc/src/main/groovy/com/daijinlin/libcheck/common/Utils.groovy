@@ -27,7 +27,7 @@ final class Utils {
   static List<File> getAndroidSources(Project project) {
     project.android.sourceSets.inject([]) {
       dirs, sourceSet -> dirs + sourceSet.java.srcDirs
-    }
+    }.findAll { it.exists() } // 过滤不存在的文件
   }
 
   static boolean isKotlinProject(final Project project) {

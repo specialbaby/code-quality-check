@@ -24,6 +24,11 @@
         <property name="eachLine" value="true"/>
     </module>
 
+    <module name="SuppressionFilter">
+        <property name="file" value="C:\Users\Administrator\Desktop\android-code-check\config\quality\checkstyle\suppressions.xml"/>
+        <property name="optional" value="false"/>
+    </module>
+
     <module name="TreeWalker">
         <module name="OuterTypeFilename"/>
         <module name="IllegalTokenText">

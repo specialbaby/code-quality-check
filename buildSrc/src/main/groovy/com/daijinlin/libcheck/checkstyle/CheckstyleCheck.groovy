@@ -3,6 +3,7 @@ package com.daijinlin.libcheck.checkstyle
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
 import com.daijinlin.libcheck.common.CommonConfig
+import com.daijinlin.libcheck.common.L
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.Checkstyle
@@ -27,30 +28,29 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
   protected void performCheck(Project project, List sources, File config, File xmlReportFile) {
     project.plugins.apply(taskName) // 1.应用插件
     project.checkstyle {
-      toolVersion = "8.5"
-      configFile config
+      toolVersion = "8.8"
+      configFile project.file("${project.rootDir}/config/quality/checkstyle/checkstyle.xml")
+      configProperties.checkstyleSuppressionsPath = project.file("${project.rootDir}/config/quality/checkstyle/suppressions.xml").absolutePath
       ignoreFailures true
       showViolations true
     }
 
     project.task(taskName, type: Checkstyle) {
       description = this.taskDescription
-      group = 'verification'
+      group = this.verification
 
       source sources
-      include '**/*.java'
-      exclude '**/gen/**'
-      exclude '**/test/**'
-      exclude '**/androidTest/**'
-      exclude '**/R.java'
-      exclude '**/BuildConfig.java'
-
+      include extension.includeFiles
+      exclude extension.excludeFiles
+      // empty classpath
       classpath = project.files()
 
       doLast {
         reports {
-          html.enabled = true
-          xml.enabled = true
+          xml.enabled = extension.xmlReports
+          xml.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.xml")
+          html.enabled = extension.htmlReports
+          html.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.html")
         }
       }
     }

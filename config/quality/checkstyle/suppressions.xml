@@ -85,6 +85,4 @@
     <!-- HandlerFactory crosses allowed limit for executable statements -->
     <suppress checks="ExecutableStatementCount" files="HandlerFactory\.java"/>
 
-    <suppress checks="[a-zA-Z0-9]*" files="R.java" />
-    <suppress checks="[a-zA-Z0-9]*" files="BuildConfig.java" />
 </suppressions>

@@ -7,7 +7,8 @@ abstract class CommonCheck<Config extends CommonConfig> {
 
   final String taskName
   final String taskDescription
-  String GROUP_VERIFICATION = "verification"
+  final String verification = "verification"
+  CodeCheckExtension extension
 
   CommonCheck(String taskName, String taskDescription) {
     this.taskName = taskName
@@ -33,10 +34,10 @@ abstract class CommonCheck<Config extends CommonConfig> {
   }
 
   void apply(Project target) {
-    CodeCheckExtension extension = target.extensions.findByType(CodeCheckExtension)
-    println(extension.excludeProjects)
-    if (extension.excludeProjects.contains(target.name)) { // 如果项目在忽略列表中则直接跳过
-      target.logger.warn "skip project $target.name"
+    extension = target.extensions.findByType(CodeCheckExtension)
+    final String name = target.name
+    if (extension.excludeProjects.contains(name) || extension.skip) { // 如果项目在忽略列表中则直接跳过
+      L.d("skip project $name")
       return
     }
 
@@ -50,7 +51,7 @@ abstract class CommonCheck<Config extends CommonConfig> {
     List<File> sources = config.getAndroidSources()
 
     if (skip) {
-      target.logger.warn "skip $taskName"
+      L.d("skip $taskName")
     } else {
 //          xmlReportFile.parentFile.mkdirs()
       performCheck(target, sources, configFile, xmlReportFile)

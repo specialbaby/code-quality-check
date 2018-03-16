@@ -51,19 +51,23 @@ class CodeCheckExtension {
    */
   boolean skip = false
 
-  void skip(boolean skip) { this.skip = skip }
-
   /**
    * 出粗走
    */
   boolean abortOnError = false
-
-  void abortOnError(boolean abortOnError) { this.abortOnError = abortOnError }
 
   boolean xmlReports = false
 
   boolean htmlReports = true
 
   String[] excludeProjects = []
+
+  String[] includeFiles = ['**/*.java']
+
+  String[] excludeFiles = ['**/gen/**',
+                          '**/test/**',
+                          '**/androidTest/**',
+                          '**/R.java',
+                          '**/BuildConfig.java']
 
 }

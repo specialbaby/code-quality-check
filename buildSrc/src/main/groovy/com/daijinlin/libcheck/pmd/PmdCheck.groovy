@@ -3,6 +3,7 @@ package com.daijinlin.libcheck.pmd
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
 import com.daijinlin.libcheck.common.CommonConfig
+import com.daijinlin.libcheck.common.L
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.Pmd
 
@@ -45,17 +46,17 @@ class PmdCheck extends CommonCheck<PmdConfig> {
 
     project.task(taskName, type: Pmd) {
       description = this.taskDescription
-      group = GROUP_VERIFICATION
+      group = this.verification
 
       source = sources/*project.fileTree(extension.pmd.source)*/
-      include '**/*.java'/*extension.pmd.include*/
-      exclude('**/gen/**', '**/debug/**')/*extension.pmd.exclude*/
+      include extension.includeFiles
+      exclude extension.excludeFiles
 
       doLast {
         reports {
-          html.enabled = true/*extension.htmlReports*/
+          xml.enabled = extension.xmlReports
           xml.destination project.file("$project.buildDir/reports/pmd/pmd.xml")
-          xml.enabled = true/*extension.xmlReports*/
+          html.enabled = extension.htmlReports
           html.destination project.file("$project.buildDir/reports/pmd/pmd.html")
         }
       }

@@ -27,11 +27,11 @@ android {
 }
 
 codeCheck {
-    skip true
+    skip false
     abortOnError false
-    xmlReports true
+    xmlReports false
     htmlReports true
-    excludeProjects ['app']
+    excludeProjects []
 
     checkstyle {
     }

@@ -11,5 +11,9 @@ import org.gradle.api.Project
  * </pre>
  */
 class CheckstyleConfig extends CommonConfig {
+  String toolVersion
+  String checkstyleSuppressionsPath
+  boolean ignoreFailures
+  boolean showViolations
   CheckstyleConfig(Project project) { super(project) }
 }

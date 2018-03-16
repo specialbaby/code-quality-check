@@ -20,12 +20,23 @@ class CodeCheckPlugin implements Plugin<Project> {
   @Override
   void apply(Project project) {
     project.extensions.create(CodeCheckExtension.NAME, CodeCheckExtension, project)
-    new CheckstyleCheck().apply(project)
-    new FindbugsCheck().apply(project)
-    new PmdCheck().apply(project)
 //    if (Utils.isAndroidProject(project) || Utils.isKotlinProject(project)) {
 //      new LintCheck().apply(project)
 //    }
+    def hasSubProjects = project.subprojects.size() > 0
+    if (hasSubProjects) {
+      project.subprojects { subProject ->
+        afterEvaluate {
+
+        }
+      }
+    } else {
+      project.afterEvaluate {
+        new CheckstyleCheck().apply(project)
+//        new FindbugsCheck().apply(project)
+//        new PmdCheck().apply(project)
+      }
+    }
   }
 
 }
