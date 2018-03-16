@@ -25,7 +25,7 @@
     </module>
 
     <module name="SuppressionFilter">
-        <property name="file" value="C:\Users\Administrator\Desktop\android-code-check\config\quality\checkstyle\suppressions.xml"/>
+        <property name="file" value="config/quality/checkstyle/suppressions.xml"/>
         <property name="optional" value="false"/>
     </module>
 

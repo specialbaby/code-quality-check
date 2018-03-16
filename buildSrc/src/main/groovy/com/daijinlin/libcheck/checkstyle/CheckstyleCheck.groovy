@@ -31,8 +31,8 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
       toolVersion = "8.8"
       configFile project.file("${project.rootDir}/config/quality/checkstyle/checkstyle.xml")
       configProperties.checkstyleSuppressionsPath = project.file("${project.rootDir}/config/quality/checkstyle/suppressions.xml").absolutePath
-      ignoreFailures true
-      showViolations true
+      ignoreFailures false // Whether this task will ignore failures and continue running the build.
+      showViolations false // Whether rule violations are to be displayed on the console.
     }
 
     project.task(taskName, type: Checkstyle) {

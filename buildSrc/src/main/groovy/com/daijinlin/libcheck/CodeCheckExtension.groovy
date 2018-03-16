@@ -46,13 +46,14 @@ class CodeCheckExtension {
   }
 
   /**
-   * @desc: "是否忽略"
+   * @desc: 是否忽略
    * @since: 1.0.0
    */
   boolean skip = false
 
   /**
-   * 出粗走
+   * @desc: Whether this task will ignore failures and continue running the build. the same as ignoreFailures
+   * @since: 1.0.0
    */
   boolean abortOnError = false
 

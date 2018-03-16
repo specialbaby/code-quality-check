@@ -13,7 +13,9 @@ import org.gradle.api.Project
 class CheckstyleConfig extends CommonConfig {
   String toolVersion
   String checkstyleSuppressionsPath
-  boolean ignoreFailures
+  /**
+   * Whether rule violations are to be displayed on the console.
+   */
   boolean showViolations
   CheckstyleConfig(Project project) { super(project) }
 }

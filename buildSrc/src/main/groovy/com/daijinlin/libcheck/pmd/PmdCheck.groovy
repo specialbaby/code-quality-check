@@ -39,6 +39,7 @@ class PmdCheck extends CommonCheck<PmdConfig> {
 
     project.pmd {
       toolVersion = "6.1.0"/*extension.pmd.toolVersion*/
+      // Whether or not to allow the build to continue if there are warnings. Example: ignoreFailures = true
       ignoreFailures = true/*extension.pmd.ignoreFailures != null ? extension.pmd.ignoreFailures : !extension.failEarly*/
       ruleSetFiles = project.files("${project.rootDir}/config/quality/pmd/pmd-ruleset.xml")/*subProject.files(rootProject.file(extension.pmd.ruleSetFile))*/
       ruleSets = []
