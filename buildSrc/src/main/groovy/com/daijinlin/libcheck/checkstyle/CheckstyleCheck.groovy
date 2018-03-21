@@ -2,7 +2,6 @@ package com.daijinlin.libcheck.checkstyle
 
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
-import com.daijinlin.libcheck.common.CommonConfig
 import com.daijinlin.libcheck.common.L
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
@@ -32,12 +31,12 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
       configFile project.file("${project.rootDir}/config/quality/checkstyle/checkstyle.xml")
       configProperties.checkstyleSuppressionsPath = project.file("${project.rootDir}/config/quality/checkstyle/suppressions.xml").absolutePath
       ignoreFailures false // Whether this task will ignore failures and continue running the build.
-      showViolations false // Whether rule violations are to be displayed on the console.
+      showViolations true // Whether rule violations are to be displayed on the console.
     }
 
     project.task(taskName, type: Checkstyle) {
       description = this.taskDescription
-      group = this.verification
+      group = this.taskGroup
 
       source sources
       include extension.includeFiles

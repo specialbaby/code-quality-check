@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 //apply plugin: 'code-check'
 apply plugin: com.daijinlin.libcheck.CodeCheckPlugin
 
+//apply from: rootProject.file('config/quality/quality.gradle')
+
 android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
@@ -25,9 +27,6 @@ android {
         abortOnError false
     }
 
-    dataBinding {
-        enabled true
-    }
 }
 
 codeCheck {

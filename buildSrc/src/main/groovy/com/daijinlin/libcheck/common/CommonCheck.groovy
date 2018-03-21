@@ -7,7 +7,7 @@ abstract class CommonCheck<Config extends CommonConfig> {
 
   final String taskName
   final String taskDescription
-  final String verification = "verification"
+  final String taskGroup = "verification"
   CodeCheckExtension extension
 
   CommonCheck(String taskName, String taskDescription) {

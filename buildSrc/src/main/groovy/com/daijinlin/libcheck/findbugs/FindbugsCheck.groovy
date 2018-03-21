@@ -49,7 +49,7 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
 
     project.task('findbugs', type: FindBugs, dependsOn: 'assemble') {
       description = this.taskDescription
-      group = this.verification
+      group = this.taskGroup
 
       boolean isJava = Utils.isJavaProject(project)
 //      classes = /*subProject.fileTree(findbugsClassesPath)*/

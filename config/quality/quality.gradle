@@ -12,7 +12,7 @@ if (!isJava) {
 
 /** ########################## checkstyle ########################## */
 checkstyle {
-    toolVersion = '8.5'
+    toolVersion = '8.8'
     showViolations true
 }
 
@@ -30,6 +30,13 @@ task checkstyle(type: Checkstyle, group: 'verification') {
     exclude '**/BuildConfig.java'
 
     classpath = files()
+
+    reports {
+        xml.enabled = false
+        html.enabled = true
+        xml.destination file("$project.buildDir/reports/checkstyle/checkstyle.xml")
+        html.destination file("$project.buildDir/reports/checkstyle/checkstyle.html")
+    }
 }
 
 /** ########################### findbugs ########################### */
@@ -52,8 +59,9 @@ task findbugs(type: FindBugs, dependsOn: 'assembleDebug', group: 'verification')
     exclude '**/gen/**'
 
     reports {
-        xml.enabled = false
-        html.enabled = true
+        // FindBugs tasks can only have one report enabled, however more than one report was enabled. You need to disable all but one of them.
+        xml.enabled = true
+        html.enabled = false
         xml.destination file("$project.buildDir/reports/findbugs/findbugs.xml")
         html.destination file("$project.buildDir/reports/findbugs/findbugs.html")
     }
@@ -89,7 +97,7 @@ if (!isJava) {
             disable 'NewApi' // gradle build will compile code use `Objects.requireNonNull()` for lambda
             abortOnError false
             ignoreWarnings true
-            xmlReport true
+            xmlReport false
             xmlOutput file("${project.buildDir}/reports/lint/lint-report.xml")
             htmlReport true
             htmlOutput file("${project.buildDir}/reports/lint/lint-report.html")

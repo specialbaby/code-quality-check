@@ -47,7 +47,7 @@ class PmdCheck extends CommonCheck<PmdConfig> {
 
     project.task(taskName, type: Pmd) {
       description = this.taskDescription
-      group = this.verification
+      group = this.taskGroup
 
       source = sources/*project.fileTree(extension.pmd.source)*/
       include extension.includeFiles
