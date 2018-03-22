@@ -29,10 +29,12 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
 
     project.checkstyle {
       toolVersion = extension.mCheckstyleConfig.toolVersion
-      configFile project.file("${project.rootDir}/config/quality/checkstyle/checkstyle.xml")
-      configProperties.checkstyleSuppressionsPath = project.file("${project.rootDir}/config/quality/checkstyle/suppressions.xml").absolutePath
+      configFile config
+//      configFile project.file("${project.rootDir}/config/quality/checkstyle/checkstyle.xml")
+//      configProperties.checkstyleSuppressionsPath = project.file("${project.rootDir}/config/quality/checkstyle/suppressions.xml").absolutePath
+      configProperties.checkstyleSuppressionsPath = project.file(extension.mCheckstyleConfig.checkstyleSuppressionsPath).absolutePath
       ignoreFailures extension.abortOnError // Whether this task will ignore failures and continue running the build.
-      showViolations true // Whether rule violations are to be displayed on the console.
+      showViolations extension.mCheckstyleConfig.showViolations // Whether rule violations are to be displayed on the console.
     }
 
     project.task(taskName, type: Checkstyle) {
@@ -46,10 +48,12 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
       classpath = project.files()
 
       reports {
-        xml.enabled = extension.xmlReports
-        xml.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.xml")
-        html.enabled = extension.htmlReports
-        html.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.html")
+        xml.enabled = extension.mCheckstyleConfig.xmlReports
+//        xml.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.xml")
+        xml.destination project.file(extension.mCheckstyleConfig.xmlReportsPath)
+        html.enabled = extension.mCheckstyleConfig.htmlReports
+//        html.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.html")
+        html.destination project.file(extension.mCheckstyleConfig.htmlReportsPath)
       }
     }
   }

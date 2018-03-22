@@ -9,6 +9,8 @@ import org.gradle.api.Project
  * Copyright © 1990-2018 J!nl!n™ Inc. All rights reserved.
  *
  * </pre>
+ *
+ * See <a href="https://docs.gradle.org/4.6/dsl/org.gradle.api.plugins.quality.Checkstyle.html">Checkstyle</a>
  */
 class CheckstyleConfig extends CommonConfig {
   String toolVersion = "8.8"
@@ -16,6 +18,12 @@ class CheckstyleConfig extends CommonConfig {
   /**
    * Whether rule violations are to be displayed on the console.
    */
-  boolean showViolations
+  boolean showViolations = false
+
+  boolean xmlReports = false
+  boolean htmlReports = true
+  String xmlReportsPath
+  String htmlReportsPath
+
   CheckstyleConfig(Project project) { super(project) }
 }

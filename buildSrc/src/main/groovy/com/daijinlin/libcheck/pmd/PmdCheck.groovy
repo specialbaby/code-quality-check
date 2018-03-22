@@ -10,6 +10,8 @@ import org.gradle.api.plugins.quality.Pmd
  * Copyright © 1990-2018 J!nl!n™ Inc. All rights reserved.
  *
  * </pre>
+ *
+ * See <a href="https://docs.gradle.org/4.6/dsl/org.gradle.api.plugins.quality.Pmd.html">Pmd</a>
  */
 class PmdCheck extends CommonCheck<PmdConfig> {
 
