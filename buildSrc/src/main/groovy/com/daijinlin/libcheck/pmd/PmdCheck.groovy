@@ -2,11 +2,8 @@ package com.daijinlin.libcheck.pmd
 
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
-import com.daijinlin.libcheck.common.CommonConfig
-import com.daijinlin.libcheck.common.L
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.Pmd
-
 /**
  * <pre>
  * Created by J!nl!n on 2018/3/15.
@@ -36,12 +33,15 @@ class PmdCheck extends CommonCheck<PmdConfig> {
   @Override
   protected void performCheck(Project project, List sources, File configFile, File xmlReportFile) {
     project.plugins.apply(taskName)
+    project.tasks.getByName('check').dependsOn taskName
 
     project.pmd {
       toolVersion = "6.1.0"/*extension.pmd.toolVersion*/
       // Whether or not to allow the build to continue if there are warnings. Example: ignoreFailures = true
-      ignoreFailures = true/*extension.pmd.ignoreFailures != null ? extension.pmd.ignoreFailures : !extension.failEarly*/
-      ruleSetFiles = project.files("${project.rootDir}/config/quality/pmd/pmd-ruleset.xml")/*subProject.files(rootProject.file(extension.pmd.ruleSetFile))*/
+      ignoreFailures = true
+/*extension.pmd.ignoreFailures != null ? extension.pmd.ignoreFailures : !extension.failEarly*/
+      ruleSetFiles = project.files("${project.rootDir}/config/quality/pmd/pmd-ruleset.xml")
+/*subProject.files(rootProject.file(extension.pmd.ruleSetFile))*/
       ruleSets = []
     }
 
@@ -53,16 +53,12 @@ class PmdCheck extends CommonCheck<PmdConfig> {
       include extension.includeFiles
       exclude extension.excludeFiles
 
-      doLast {
-        reports {
-          xml.enabled = extension.xmlReports
-          xml.destination project.file("$project.buildDir/reports/pmd/pmd.xml")
-          html.enabled = extension.htmlReports
-          html.destination project.file("$project.buildDir/reports/pmd/pmd.html")
-        }
+      reports {
+        xml.enabled = extension.xmlReports
+        xml.destination project.file("$project.buildDir/reports/pmd/pmd.xml")
+        html.enabled = extension.htmlReports
+        html.destination project.file("$project.buildDir/reports/pmd/pmd.html")
       }
     }
-
-    project.tasks.getByName('check').dependsOn taskName
   }
 }

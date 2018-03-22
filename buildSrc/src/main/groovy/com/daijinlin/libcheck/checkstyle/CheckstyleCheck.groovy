@@ -2,7 +2,6 @@ package com.daijinlin.libcheck.checkstyle
 
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
-import com.daijinlin.libcheck.common.L
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.Checkstyle
@@ -26,11 +25,13 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
   @Override
   protected void performCheck(Project project, List sources, File config, File xmlReportFile) {
     project.plugins.apply(taskName) // 1.应用插件
+    project.tasks.getByName('check').dependsOn taskName
+
     project.checkstyle {
-      toolVersion = "8.8"
+      toolVersion = extension.mCheckstyleConfig.toolVersion
       configFile project.file("${project.rootDir}/config/quality/checkstyle/checkstyle.xml")
       configProperties.checkstyleSuppressionsPath = project.file("${project.rootDir}/config/quality/checkstyle/suppressions.xml").absolutePath
-      ignoreFailures false // Whether this task will ignore failures and continue running the build.
+      ignoreFailures extension.abortOnError // Whether this task will ignore failures and continue running the build.
       showViolations true // Whether rule violations are to be displayed on the console.
     }
 
@@ -44,17 +45,13 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
       // empty classpath
       classpath = project.files()
 
-      doLast {
-        reports {
-          xml.enabled = extension.xmlReports
-          xml.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.xml")
-          html.enabled = extension.htmlReports
-          html.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.html")
-        }
+      reports {
+        xml.enabled = extension.xmlReports
+        xml.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.xml")
+        html.enabled = extension.htmlReports
+        html.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.html")
       }
     }
-
-    project.tasks.getByName('check').dependsOn taskName
   }
 
   @Override

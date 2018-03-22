@@ -37,6 +37,8 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
   @Override
   protected void performCheck(Project project, List sources, File configFile, File xmlReportFile) {
     project.plugins.apply(taskName)
+    project.tasks.getByName('check').dependsOn taskName
+
     project.findbugs {
       sourceSets = []
       ignoreFailures = true
@@ -62,16 +64,13 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
       // empty classpath
       classpath = project.files()
 
-      doLast {
-        reports {
-          xml.enabled = extension.xmlReports
-          xml.destination project.file("$project.buildDir/reports/findbugs/findbugs.xml")
-          html.enabled = extension.htmlReports
-          html.destination project.file("$project.buildDir/reports/findbugs/findbugs.html")
-        }
+      reports {
+        xml.enabled = extension.xmlReports
+        xml.destination project.file("$project.buildDir/reports/findbugs/findbugs.xml")
+        html.enabled = extension.htmlReports
+        html.destination project.file("$project.buildDir/reports/findbugs/findbugs.html")
       }
     }
 
-    project.tasks.getByName('check').dependsOn taskName
   }
 }

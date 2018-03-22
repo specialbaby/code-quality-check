@@ -11,7 +11,7 @@ import org.gradle.api.Project
  * </pre>
  */
 class CheckstyleConfig extends CommonConfig {
-  String toolVersion
+  String toolVersion = "8.8"
   String checkstyleSuppressionsPath
   /**
    * Whether rule violations are to be displayed on the console.
