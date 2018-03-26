@@ -1,6 +1,5 @@
 package com.daijinlin.libcheck
 
-import com.daijinlin.libcheck.checkstyle.CheckstyleCheck
 import com.daijinlin.libcheck.findbugs.FindbugsCheck
 import com.daijinlin.libcheck.pmd.PmdCheck
 import org.gradle.api.Plugin
@@ -36,7 +35,7 @@ class CodeCheckPlugin implements Plugin<Project> {
   private void handleCheck(Project project) {
     //new CheckstyleCheck().apply(project)
     new FindbugsCheck().apply(project)
-    new PmdCheck().apply(project)
+    //new PmdCheck().apply(project)
 //    if (Utils.isAndroidProject(project) || Utils.isKotlinProject(project)) {
 //      new LintCheck().apply(project)
 //    }

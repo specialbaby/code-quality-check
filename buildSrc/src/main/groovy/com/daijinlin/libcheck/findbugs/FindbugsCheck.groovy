@@ -2,7 +2,6 @@ package com.daijinlin.libcheck.findbugs
 
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
-import com.daijinlin.libcheck.common.CommonConfig
 import com.daijinlin.libcheck.common.L
 import com.daijinlin.libcheck.common.Utils
 import org.gradle.api.Project
@@ -39,15 +38,14 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
   protected void performCheck(Project project, List sources, File configFile, File xmlReportFile) {
     project.plugins.apply(taskName)
     project.tasks.getByName('check').dependsOn taskName
-
     project.findbugs {
       sourceSets = []
-      ignoreFailures = true
-/*extension.findbugs.ignoreFailures != null ? extension.findbugs.ignoreFailures : !extension.failEarly*/
-      toolVersion = "3.0.1"/*extension.findbugs.toolVersion*/
-      effort = "max"/*extension.findbugs.effort*/
-      reportLevel = "high"/*extension.findbugs.reportLevel*/
+      ignoreFailures = extension.mFindbugsConfig.ignoreFailures
+      toolVersion = extension.mFindbugsConfig.toolVersion
+      effort = extension.mFindbugsConfig.effort
+      reportLevel = extension.mFindbugsConfig.reportLevel
       excludeFilter = configFile/*rootProject.file(extension.findbugs.excludeFilter)*/
+      L.d("toolVersion:" + toolVersion + " effort:" + effort + " reportLevel:" + reportLevel)
     }
 
     project.task('findbugs', type: FindBugs, dependsOn: 'assemble') {
@@ -67,11 +65,14 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
 
       reports {
         xml.enabled = extension.xmlReports
-        xml.destination project.file("$project.buildDir/reports/findbugs/findbugs.xml")
+        xml.destination project.file(extension.xmlReportsPath + "$taskName/$taskName" + ".xml")
         html.enabled = extension.htmlReports
-        html.destination project.file("$project.buildDir/reports/findbugs/findbugs.html")
+        html.destination project.file(extension.htmlReportsPath + "$taskName/$taskName" + ".html")
+        //findbugs不能同时生成xml和html文件
+        if (xml.enabled && html.enabled) {
+          xml.enable = false
+        }
       }
     }
-
   }
 }

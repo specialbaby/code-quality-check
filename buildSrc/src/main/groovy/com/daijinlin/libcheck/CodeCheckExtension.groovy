@@ -61,14 +61,17 @@ class CodeCheckExtension {
 
   boolean htmlReports = true
 
+  String xmlReportsPath = "build/reports/"
+  String htmlReportsPath = "build/reports/"
+
   String[] excludeProjects = []
 
   String[] includeFiles = ['**/*.java']
 
   String[] excludeFiles = ['**/gen/**',
-                          '**/test/**',
-                          '**/androidTest/**',
-                          '**/R.java',
-                          '**/BuildConfig.java']
+                           '**/test/**',
+                           '**/androidTest/**',
+                           '**/R.java',
+                           '**/BuildConfig.java']
 
 }
