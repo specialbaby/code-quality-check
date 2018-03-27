@@ -23,7 +23,7 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
   }
 
   @Override
-  protected void performCheck(Project project, List sources, File config, File xmlReportFile) {
+  protected void performCheck(Project project, List sources, File config, File xmlReportFile, File htmlReportFile) {
     project.plugins.apply(taskName) // 1.应用插件
     project.tasks.getByName('check').dependsOn taskName
 
@@ -51,10 +51,10 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
 
       reports {
         xml.enabled = extension.mCheckstyleConfig.xmlReports
-        xml.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.xml")
+        xml.destination xmlReportFile
         //xml.destination project.file(extension.mCheckstyleConfig.xmlReportsPath)
         html.enabled = extension.mCheckstyleConfig.htmlReports
-        html.destination project.file("$project.buildDir/reports/checkstyle/checkstyle.html")
+        html.destination htmlReportFile
         //html.destination project.file(extension.mCheckstyleConfig.htmlReportsPath)
       }
     }

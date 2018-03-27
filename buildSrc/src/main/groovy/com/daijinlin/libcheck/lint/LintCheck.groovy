@@ -34,7 +34,7 @@ class LintCheck extends CommonCheck {
   }
 
   @Override
-  protected void performCheck(Project project, List sources, File configFile, File xmlReportFile) {
+  protected void performCheck(Project project, List sources, File configFile, File xmlReportFile, File htmlReportFile) {
     println("performLintCheck")
 //    subProject.android.lintOptions {
 //      warningsAsErrors extension.lint.warningsAsErrors != null ? extension.lint.warningsAsErrors : extension.failEarly

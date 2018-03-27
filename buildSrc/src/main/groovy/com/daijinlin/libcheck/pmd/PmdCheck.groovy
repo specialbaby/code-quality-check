@@ -4,6 +4,7 @@ import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.Pmd
+
 /**
  * <pre>
  * Created by J!nl!n on 2018/3/15.
@@ -33,7 +34,7 @@ class PmdCheck extends CommonCheck<PmdConfig> {
   }
 
   @Override
-  protected void performCheck(Project project, List sources, File configFile, File xmlReportFile) {
+  protected void performCheck(Project project, List sources, File configFile, File xmlReportFile, File htmlReportFile) {
     project.plugins.apply(taskName)
     project.tasks.getByName('check').dependsOn taskName
 
@@ -42,7 +43,7 @@ class PmdCheck extends CommonCheck<PmdConfig> {
       // Whether or not to allow the build to continue if there are warnings. Example: ignoreFailures = true
       ignoreFailures = true
 /*extension.pmd.ignoreFailures != null ? extension.pmd.ignoreFailures : !extension.failEarly*/
-      ruleSetFiles = project.files("${project.rootDir}/config/quality/pmd/pmd-ruleset.xml")
+      ruleSetFiles = project.files("${project.rootDir}/config/quality/pmd/pmd.xml")
 /*subProject.files(rootProject.file(extension.pmd.ruleSetFile))*/
       ruleSets = []
     }
@@ -57,9 +58,9 @@ class PmdCheck extends CommonCheck<PmdConfig> {
 
       reports {
         xml.enabled = extension.xmlReports
-        xml.destination project.file("$project.buildDir/reports/pmd/pmd.xml")
+        xml.destination xmlReportFile
         html.enabled = extension.htmlReports
-        html.destination project.file("$project.buildDir/reports/pmd/pmd.html")
+        html.destination htmlReportFile
       }
     }
   }

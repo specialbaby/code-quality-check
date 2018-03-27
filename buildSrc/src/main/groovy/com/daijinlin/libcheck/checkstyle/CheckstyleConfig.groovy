@@ -22,8 +22,6 @@ class CheckstyleConfig extends CommonConfig {
 
   boolean xmlReports = false
   boolean htmlReports = true
-  String xmlReportsPath
-  String htmlReportsPath
 
   CheckstyleConfig(Project project) { super(project) }
 }

@@ -20,7 +20,7 @@ abstract class CommonCheck<Config extends CommonConfig> {
   protected abstract Config getConfig(CodeCheckExtension extension)
 
   protected abstract void performCheck(Project project, List<File> sources,
-                                       File configFile, File xmlReportFile)
+                                       File configFile, File xmlReportFile, File htmlReportFile)
 
   protected abstract int getErrorCount(File xmlReportFile)
 
@@ -46,7 +46,8 @@ abstract class CommonCheck<Config extends CommonConfig> {
     boolean abortOnError = config.resolveAbortOnError(extension.abortOnError)
     File configFile = config.resolveConfigFile(taskName)
 //        File styleFile = config.resolveStyleFile(taskCode)
-    File xmlReportFile = config.resolveXmlReportFile(taskName)
+    File xmlReportFile = target.file(extension.xmlReportsPath + "$taskName/$taskName" + ".xml")
+    File htmlReportFile = target.file(extension.xmlReportsPath + "$taskName/$taskName" + ".html")
 //        File htmlReportFile = config.resolveHtmlReportFile(taskCode)
     List<File> sources = config.getAndroidSources()
 
@@ -54,7 +55,7 @@ abstract class CommonCheck<Config extends CommonConfig> {
       L.d("skip $taskName")
     } else {
 //          xmlReportFile.parentFile.mkdirs()
-      performCheck(target, sources, configFile, xmlReportFile)
+      performCheck(target, sources, configFile, xmlReportFile, htmlReportFile)
 //          htmlReportFile.parentFile.mkdirs()
 //          reformatReport(target, styleFile, xmlReportFile, htmlReportFile)
 
