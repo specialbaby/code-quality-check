@@ -1,11 +1,14 @@
 apply plugin: 'groovy'
 apply plugin: 'maven'
 
-repositories { jcenter() }
+repositories { 
+	google()
+	jcenter() 
+}
 
 dependencies {
-    compile gradleApi()
-    compile localGroovy()
+    implementation gradleApi()
+    implementation localGroovy()
 }
 
 targetCompatibility = '1.7'
