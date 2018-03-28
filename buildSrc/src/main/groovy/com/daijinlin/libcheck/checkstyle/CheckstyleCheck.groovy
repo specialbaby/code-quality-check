@@ -61,13 +61,13 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
   }
 
   @Override
-  protected int getErrorCount(File xmlReportFile) {
+  protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
     GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
     return xml.file.inject(0) { count, file -> count + file.error.size() }
   }
 
   @Override
-  protected String getErrorMessage(int errorCount, File htmlReportFile) {
+  protected String getErrorMessage(int errorCount, File xmlReportFile, File htmlReportFile) {
     return "$errorCount Checkstyle rule violations were found. See the report at: ${htmlReportFile.toURI()}"
   }
 

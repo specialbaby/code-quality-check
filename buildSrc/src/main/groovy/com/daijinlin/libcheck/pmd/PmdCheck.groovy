@@ -24,12 +24,12 @@ class PmdCheck extends CommonCheck<PmdConfig> {
   }
 
   @Override
-  protected int getErrorCount(File xmlReportFile) {
+  protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
     return 0
   }
 
   @Override
-  protected String getErrorMessage(int errorCount, File htmlReportFile) {
+  protected String getErrorMessage(int errorCount, File xmlReportFile, File htmlReportFile) {
     return null
   }
 

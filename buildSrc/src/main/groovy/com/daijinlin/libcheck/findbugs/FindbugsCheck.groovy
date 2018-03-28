@@ -26,13 +26,25 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
   }
 
   @Override
-  protected int getErrorCount(File xmlReportFile) {
-    GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
-    return xml.FindBugsSummary.getProperty('@total_bugs').text() as int
+  protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
+    if (xmlReportFile.exists()) {
+      GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
+      return xml.FindBugsSummary.getProperty('@total_bugs').text() as int
+    } else if (htmlReportFile.exists()) {
+//      def parser = new XmlSlurper()
+//      parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
+//      parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+//      def html = parser.parseText(htmlReportFile.text)
+//      html.body.findAll() {
+//
+//      }
+      return 123
+    }
+    return 0
   }
 
   @Override
-  protected String getErrorMessage(int errorCount, File htmlReportFile) {
+  protected String getErrorMessage(int errorCount, File xmlReportFile, File htmlReportFile) {
     return "$errorCount FindBugs rule violations were found. See the report at: ${htmlReportFile.toURI()}"
   }
 
@@ -42,12 +54,10 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
     project.tasks.getByName('check').dependsOn taskName
     project.findbugs {
       sourceSets = []
-      ignoreFailures = extension.mFindbugsConfig.ignoreFailures
       toolVersion = extension.mFindbugsConfig.toolVersion
       effort = extension.mFindbugsConfig.effort
       reportLevel = extension.mFindbugsConfig.reportLevel
       excludeFilter = configFile/*rootProject.file(extension.findbugs.excludeFilter)*/
-      L.d("toolVersion:" + toolVersion + " effort:" + effort + " reportLevel:" + reportLevel)
     }
 
     project.task('findbugs', type: FindBugs, dependsOn: 'assemble') {
@@ -72,7 +82,7 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
         html.destination htmlReportFile
         //findbugs不能同时生成xml和html文件
         if (xml.enabled && html.enabled) {
-          xml.enable = false
+          xml.enabled = false
         }
       }
     }
