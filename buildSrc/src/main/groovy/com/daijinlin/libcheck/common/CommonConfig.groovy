@@ -7,6 +7,9 @@ class CommonConfig {
 
   protected final Project project
 
+  private File xmlReportFile
+  private File htmlReportFile
+
   CommonConfig(Project project) {
     this.project = project
   }

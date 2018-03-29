@@ -3,13 +3,18 @@ package com.daijinlin.libcheck.common
 import com.daijinlin.libcheck.CodeCheckExtension
 import org.gradle.api.GradleException
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.execution.TaskExecutionListener
+import org.gradle.api.tasks.TaskState
 
-abstract class CommonCheck<Config extends CommonConfig> {
+abstract class CommonCheck<Config extends CommonConfig> implements TaskExecutionListener {
 
   final String taskName
   final String taskDescription
   final String taskGroup = "verification"
   CodeCheckExtension extension
+  File xmlReportFile
+  File htmlReportFile
 
   CommonCheck(String taskName, String taskDescription) {
     this.taskName = taskName
@@ -37,18 +42,17 @@ abstract class CommonCheck<Config extends CommonConfig> {
   void apply(Project target) {
     extension = target.extensions.findByType(CodeCheckExtension)
     final String name = target.name
+    target.gradle.addListener(this)
     if (extension.excludeProjects.contains(name) || extension.skip) { // 如果项目在忽略列表中则直接跳过
       L.d("skip project $name")
       return
     }
-
     Config config = getConfig(extension)
     boolean skip = config.resolveSkip(extension.skip)
-    boolean abortOnError = config.resolveAbortOnError(extension.abortOnError)
     File configFile = config.resolveConfigFile(taskName)
 //        File styleFile = config.resolveStyleFile(taskCode)
-    File xmlReportFile = target.file(extension.reportsPath + "$taskName/$taskName" + ".xml")
-    File htmlReportFile = target.file(extension.reportsPath + "$taskName/$taskName" + ".html")
+    xmlReportFile = target.file(extension.reportsPath + "${taskName}/${taskName}.xml")
+    htmlReportFile = target.file(extension.reportsPath + "${taskName}/${taskName}.html")
 //        File htmlReportFile = config.resolveHtmlReportFile(taskCode)
     List<File> sources = config.getAndroidSources()
 
@@ -60,7 +64,7 @@ abstract class CommonCheck<Config extends CommonConfig> {
 //          htmlReportFile.parentFile.mkdirs()
 //          reformatReport(target, styleFile, xmlReportFile, htmlReportFile)
 
-      int errorCount = getErrorCount(xmlReportFile, htmlReportFile)
+      //int errorCount = getErrorCount(xmlReportFile, htmlReportFile)
 //      if (errorCount) {
 //        String errorMessage = getErrorMessage(errorCount, xmlReportFile, htmlReportFile)
 //        if (abortOnError) {
@@ -72,5 +76,26 @@ abstract class CommonCheck<Config extends CommonConfig> {
     }
 
 //    target.tasks.getByName('check').dependsOn taskName
+  }
+
+  @Override
+  void beforeExecute(Task task) {
+
+  }
+
+  @Override
+  void afterExecute(Task task, TaskState taskState) {
+    if (task.name == taskName) {
+      boolean abortOnError = getConfig(extension).resolveAbortOnError(extension.abortOnError)
+      int errorCount = getErrorCount(xmlReportFile, htmlReportFile)
+      if (errorCount) {
+        String errorMessage = getErrorMessage(errorCount, xmlReportFile, htmlReportFile)
+        if (abortOnError) {
+          throw new GradleException(errorMessage)
+        } else {
+          L.d(errorMessage)
+        }
+      }
+    }
   }
 }

@@ -6,7 +6,9 @@ import com.daijinlin.libcheck.common.L
 import com.daijinlin.libcheck.common.Utils
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.plugins.quality.FindBugs
+import org.gradle.api.tasks.TaskState
 
 /**
  * <pre>
@@ -28,18 +30,20 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
   @Override
   protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
     if (xmlReportFile.exists()) {
+      L.d("xmlReportFile exists")
       GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
       return xml.FindBugsSummary.getProperty('@total_bugs').text() as int
     } else if (htmlReportFile.exists()) {
+      L.d("htmlReportFile exists")
 //      def parser = new XmlSlurper()
 //      parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
 //      parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 //      def html = parser.parseText(htmlReportFile.text)
 //      html.body.findAll() {
-//
 //      }
       return 123
     }
+    L.d("NoFile exists")
     return 0
   }
 
@@ -53,7 +57,6 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
     project.plugins.apply(taskName)
     project.tasks.getByName('check').dependsOn taskName
     project.findbugs {
-      sourceSets = []
       toolVersion = extension.mFindbugsConfig.toolVersion
       effort = extension.mFindbugsConfig.effort
       reportLevel = extension.mFindbugsConfig.reportLevel

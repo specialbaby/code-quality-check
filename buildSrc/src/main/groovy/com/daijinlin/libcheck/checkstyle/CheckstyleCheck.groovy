@@ -62,8 +62,14 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
 
   @Override
   protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
-    GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
-    return xml.file.inject(0) { count, file -> count + file.error.size() }
+    if (xmlReportFile.exists()) {
+      GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
+      return xml.file.inject(0) { count, file -> count + file.error.size() }
+    } else if (htmlReportFile.exists()) {
+      //todo:解析html
+      return 123
+    }
+    return 0
   }
 
   @Override
