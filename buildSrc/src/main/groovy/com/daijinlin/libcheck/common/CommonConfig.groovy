@@ -7,9 +7,6 @@ class CommonConfig {
 
   protected final Project project
 
-  private File xmlReportFile
-  private File htmlReportFile
-
   CommonConfig(Project project) {
     this.project = project
   }
@@ -44,22 +41,6 @@ class CommonConfig {
   void config(String path) {
     config(project.file(path))
   }
-
-//  File reportDirectory
-//  File reportXML
-//  File reportHTML
-//
-//  void report(File reportDirectory) {
-//    this.reportDirectory = reportDirectory
-//  }
-//
-//  void reportXML(File reportXML) {
-//    this.reportXML = reportXML
-//  }
-//
-//  void reportHTML(File reportHTML) {
-//    this.reportHTML = reportHTML
-//  }
 
   boolean resolveSkip(boolean defaultSkip) {
     return skip == null ? defaultSkip : skip
@@ -111,26 +92,6 @@ class CommonConfig {
     file << resolveStyle(code)
     return file
   }
-
-//  private File resolveReportFile(String extension, File reportFile, File reportDirectory, String code) {
-//    if (reportFile) {
-//      return reportFile
-//    }
-//
-//    if (reportDirectory) {
-//      return new File(reportDirectory, "${code}.${extension}")
-//    }
-//
-//    return new File(project.buildDir, "outputs/${code}/${code}.${extension}")
-//  }
-//
-//  File resolveXmlReportFile(String code) {
-//    return resolveReportFile('xml', reportXML, reportDirectory, code)
-//  }
-//
-//  File resolveHtmlReportFile(String code) {
-//    return resolveReportFile('html', reportHTML, reportDirectory, code)
-//  }
 
   List<File> getAndroidSources() {
     return Utils.getAndroidSources(project)

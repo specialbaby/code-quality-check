@@ -50,37 +50,19 @@ abstract class CommonCheck<Config extends CommonConfig> implements TaskExecution
     Config config = getConfig(extension)
     boolean skip = config.resolveSkip(extension.skip)
     File configFile = config.resolveConfigFile(taskName)
-//        File styleFile = config.resolveStyleFile(taskCode)
-    xmlReportFile = target.file(extension.reportsPath + "${taskName}/${taskName}.xml")
-    htmlReportFile = target.file(extension.reportsPath + "${taskName}/${taskName}.html")
-//        File htmlReportFile = config.resolveHtmlReportFile(taskCode)
+    xmlReportFile = target.file("$extension.reportsPath/${taskName}/${taskName}.xml")
+    htmlReportFile = target.file("$extension.reportsPath/${taskName}/${taskName}.html")
     List<File> sources = config.getAndroidSources()
 
     if (skip) {
       L.d("skip $taskName")
     } else {
-//          xmlReportFile.parentFile.mkdirs()
       performCheck(target, sources, configFile, xmlReportFile, htmlReportFile)
-//          htmlReportFile.parentFile.mkdirs()
-//          reformatReport(target, styleFile, xmlReportFile, htmlReportFile)
-
-      //int errorCount = getErrorCount(xmlReportFile, htmlReportFile)
-//      if (errorCount) {
-//        String errorMessage = getErrorMessage(errorCount, xmlReportFile, htmlReportFile)
-//        if (abortOnError) {
-//          throw new GradleException(errorMessage)
-//        } else {
-//          target.logger.warn errorMessage
-//        }
-//      }
     }
-
-//    target.tasks.getByName('check').dependsOn taskName
   }
 
   @Override
   void beforeExecute(Task task) {
-
   }
 
   @Override

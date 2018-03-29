@@ -61,7 +61,7 @@ class CodeCheckExtension {
 
   boolean htmlReports = true
 
-  String reportsPath = "build/reports/"
+  String reportsPath = "build/reports"
 
   String[] excludeProjects = []
 
