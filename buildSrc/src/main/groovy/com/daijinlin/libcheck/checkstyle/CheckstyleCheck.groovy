@@ -12,6 +12,8 @@ import org.gradle.api.plugins.quality.Checkstyle
  * Copyright © 1990-2018 J!nl!n™ Inc. All rights reserved.
  *
  * </pre>
+ *
+ * @see <a href="https://docs.gradle.org/4.6/dsl/org.gradle.api.plugins.quality.Checkstyle.html">Checkstyle</a>
  */
 class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
 
@@ -50,10 +52,10 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
       classpath = project.files()
 
       reports {
-        xml.enabled = extension.mCheckstyleConfig.xmlReports
+        xml.enabled = extension.xmlReports
         xml.destination xmlReportFile
         //xml.destination project.file(extension.mCheckstyleConfig.xmlReportsPath)
-        html.enabled = extension.mCheckstyleConfig.htmlReports
+        html.enabled = extension.htmlReports
         html.destination htmlReportFile
         //html.destination project.file(extension.mCheckstyleConfig.htmlReportsPath)
       }

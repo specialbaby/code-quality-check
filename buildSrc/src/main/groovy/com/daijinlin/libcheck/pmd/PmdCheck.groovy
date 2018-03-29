@@ -12,7 +12,7 @@ import org.gradle.api.plugins.quality.Pmd
  *
  * </pre>
  *
- * See <a href="https://docs.gradle.org/4.6/dsl/org.gradle.api.plugins.quality.Pmd.html">Pmd</a>
+ * @see <a href="https://docs.gradle.org/4.6/dsl/org.gradle.api.plugins.quality.Pmd.html">Pmd</a>
  */
 class PmdCheck extends CommonCheck<PmdConfig> {
 

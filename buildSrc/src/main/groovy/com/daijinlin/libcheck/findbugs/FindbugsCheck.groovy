@@ -16,7 +16,7 @@ import org.gradle.api.tasks.TaskState
  * Copyright © 1990-2018 J!nl!n™ Inc. All rights reserved.
  *
  * </pre>
- * See <a href="https://docs.gradle.org/4.6/dsl/org.gradle.api.plugins.quality.FindBugs.html">FindBugs</a>
+ * @see <a href="https://docs.gradle.org/4.6/dsl/org.gradle.api.plugins.quality.FindBugs.html">FindBugs</a>
  */
 class FindbugsCheck extends CommonCheck<FindbugsConfig> {
 
@@ -56,6 +56,7 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
   protected void performCheck(Project project, List sources, File configFile, File xmlReportFile, File htmlReportFile) {
     project.plugins.apply(taskName)
     project.tasks.getByName('check').dependsOn taskName
+
     project.findbugs {
       toolVersion = extension.mFindbugsConfig.toolVersion
       effort = extension.mFindbugsConfig.effort
