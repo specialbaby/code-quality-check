@@ -11,6 +11,9 @@ import org.gradle.api.Project
  * Copyright © 1990-2018 J!nl!n™ Inc. All rights reserved.
  *
  * </pre>
+ *
+ * @see <a href="https://developer.android.com/studio/write/lint.html">Improve Your Code with Lint</a>
+ * @see <a href="http://google.github.io/android-gradle-dsl/current/com.android.build.gradle.internal.dsl.LintOptions.html#com.android.build.gradle.internal.dsl.LintOptions">LintOptions</a>
  */
 class LintCheck extends CommonCheck {
 
@@ -24,23 +27,22 @@ class LintCheck extends CommonCheck {
   }
 
   @Override
-  protected int getErrorCount(File xmlReportFile,File htmlReportFile) {
-    return 0
+  protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
+    return 1
   }
 
   @Override
-  protected String getErrorMessage(int errorCount,File xmlReportFile, File htmlReportFile) {
-    return null
+  protected String getErrorMessage(int errorCount, File xmlReportFile, File htmlReportFile) {
+    return "$errorCount issues found. See the report at:${htmlReportFile.toURI()}"
   }
 
   @Override
   protected void performCheck(Project project, List sources, File configFile, File xmlReportFile, File htmlReportFile) {
-    println("performLintCheck")
-//    subProject.android.lintOptions {
-//      warningsAsErrors extension.lint.warningsAsErrors != null ? extension.lint.warningsAsErrors : extension.failEarly
-//      abortOnError extension.lint.abortOnError != null ? extension.lint.abortOnError : extension.failEarly
-//    }
-//
+    project.android.lintOptions {
+      warningsAsErrors false
+      abortOnError extension.abortOnError
+    }
+
 //    if (extension.lint.checkAllWarnings != null) {
 //      subProject.android.lintOptions {
 //        checkAllWarnings = extension.lint.checkAllWarnings
@@ -59,11 +61,11 @@ class LintCheck extends CommonCheck {
 //      }
 //    }
 //
-//    if (extension.lint.lintConfig != null) {
-//      subProject.android.lintOptions {
-//        lintConfig extension.lint.lintConfig
-//      }
-//    }
+    if (extension.lint.lintConfig != null) {
+      project.android.lintOptions {
+        lintConfig project.file("${project.rootDir}/config/quality/lint/lint.xml")
+      }
+    }
 //
 //    if (extension.lint.checkReleaseBuilds != null) {
 //      subProject.android.lintOptions {

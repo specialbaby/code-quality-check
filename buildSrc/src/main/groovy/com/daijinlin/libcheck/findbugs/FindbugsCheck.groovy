@@ -30,11 +30,9 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
   @Override
   protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
     if (xmlReportFile.exists()) {
-      L.d("xmlReportFile exists")
       GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
       return xml.FindBugsSummary.getProperty('@total_bugs').text() as int
     } else if (htmlReportFile.exists()) {
-      L.d("htmlReportFile exists")
 //      def parser = new XmlSlurper()
 //      parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
 //      parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
@@ -43,13 +41,12 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
 //      }
       return 123
     }
-    L.d("NoFile exists")
     return 0
   }
 
   @Override
   protected String getErrorMessage(int errorCount, File xmlReportFile, File htmlReportFile) {
-    return "$errorCount FindBugs rule violations were found. See the report at: ${htmlReportFile.toURI()}"
+    return "$errorCount FindBugs rule violations were found. See the report at: ${htmlReportFile.absolutePath}"
   }
 
   @Override
@@ -61,7 +58,7 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
       toolVersion = extension.mFindbugsConfig.toolVersion
       effort = extension.mFindbugsConfig.effort
       reportLevel = extension.mFindbugsConfig.reportLevel
-      excludeFilter = configFile/*rootProject.file(extension.findbugs.excludeFilter)*/
+      excludeFilter = configFile
     }
 
     project.task('findbugs', type: FindBugs, dependsOn: 'assemble') {
@@ -69,7 +66,6 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
       group = this.taskGroup
 
       boolean isJava = Utils.isJavaProject(project)
-//      classes = /*subProject.fileTree(findbugsClassesPath)*/
       if (isJava) {
         classes = project.files("$project.projectDir.absolutePath/build/classes")
       } else {
@@ -84,7 +80,7 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
         xml.destination xmlReportFile
         html.enabled = extension.htmlReports
         html.destination htmlReportFile
-        //findbugs不能同时生成xml和html文件
+        //,findbugs不能同时生成xml和html文件
         if (xml.enabled && html.enabled) {
           xml.enabled = false
         }

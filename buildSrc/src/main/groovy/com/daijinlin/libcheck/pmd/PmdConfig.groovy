@@ -11,5 +11,9 @@ import org.gradle.api.Project
  * </pre>
  */
 class PmdConfig extends CommonConfig {
+  String toolVersion = "6.1.0"
+
+  List<File> ruleSets = []
+
   PmdConfig(Project project) { super(project) }
 }

@@ -1,6 +1,7 @@
 package com.daijinlin.libcheck.checkstyle
 
 import com.daijinlin.libcheck.common.CommonConfig
+import com.daijinlin.libcheck.common.Utils
 import org.gradle.api.Project
 
 /**
@@ -21,4 +22,30 @@ class CheckstyleConfig extends CommonConfig {
   boolean showViolations = false
 
   CheckstyleConfig(Project project) { super(project) }
+
+  File resolveSuppressionsFile() {
+    File file = new File(project.buildDir, "tmp/code-check/suppressions.xml")
+    file.parentFile.mkdirs()
+    file.delete()
+    file << resolveSuppressions()
+    return file
+  }
+
+  private String resolveSuppressions() {
+    if (checkstyleSuppressionsPath) {
+      return project.file(checkstyleSuppressionsPath).text
+    }
+
+    File file = project.file("config/quality/checkstyle/suppressions.xml")
+    if (file.exists()) {
+      return file.text
+    }
+
+    File rootFile = project.rootProject.file("config/quality/checkstyle/suppressions.xml")
+    if (rootFile.exists()) {
+      return rootFile.text
+    }
+
+    return Utils.getResource(project, "checkstyle/suppressions.xml")
+  }
 }

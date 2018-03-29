@@ -13,7 +13,7 @@ final class Utils {
     Set<File> files = new HashSet<>()
     files += project.buildscript.configurations.classpath.resolve()
     files += project.rootProject.buildscript.configurations.classpath.resolve()
-    println(resourcePath)
+
     File file = files.find { new JarFile(it).getJarEntry(resourcePath) }
     if (file == null) {
       return null

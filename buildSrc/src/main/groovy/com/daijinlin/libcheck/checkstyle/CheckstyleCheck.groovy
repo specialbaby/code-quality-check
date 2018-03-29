@@ -2,6 +2,7 @@ package com.daijinlin.libcheck.checkstyle
 
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
+import com.daijinlin.libcheck.common.L
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.Checkstyle
@@ -54,10 +55,8 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
       reports {
         xml.enabled = extension.xmlReports
         xml.destination xmlReportFile
-        //xml.destination project.file(extension.mCheckstyleConfig.xmlReportsPath)
         html.enabled = extension.htmlReports
         html.destination htmlReportFile
-        //html.destination project.file(extension.mCheckstyleConfig.htmlReportsPath)
       }
     }
   }
@@ -66,7 +65,7 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
   protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
     if (xmlReportFile.exists()) {
       GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
-      return xml.file.inject(0) { count, file -> count + file.error.size() }
+      return xml.file.inject(0) { count, file -> count + file.error.size() } as int
     } else if (htmlReportFile.exists()) {
       //todo:解析html
       return 123
