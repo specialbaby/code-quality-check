@@ -3,6 +3,7 @@ package com.daijinlin.libcheck.lint
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
 import com.daijinlin.libcheck.common.CommonConfig
+import com.daijinlin.libcheck.common.L
 import org.gradle.api.Project
 
 /**
@@ -28,7 +29,7 @@ class LintCheck extends CommonCheck {
 
   @Override
   protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
-    return 1
+    return 0
   }
 
   @Override
@@ -38,9 +39,17 @@ class LintCheck extends CommonCheck {
 
   @Override
   protected void performCheck(Project project, List sources, File configFile, File xmlReportFile, File htmlReportFile) {
+    project.tasks.getByName('check').dependsOn taskName
     project.android.lintOptions {
-      warningsAsErrors false
+      L.d("lintOptions")
+      warningsAsErrors extension.mLintConfig.warningsAsErrors
       abortOnError extension.abortOnError
+      ignoreWarnings extension.mLintConfig.ignoreWarnings
+      xmlReport extension.xmlReports
+      xmlOutput xmlReportFile
+      htmlReport extension.htmlReports
+      htmlOutput htmlReportFile
+      lintConfig configFile
     }
 
 //    if (extension.lint.checkAllWarnings != null) {
@@ -61,11 +70,11 @@ class LintCheck extends CommonCheck {
 //      }
 //    }
 //
-    if (extension.lint.lintConfig != null) {
-      project.android.lintOptions {
-        lintConfig project.file("${project.rootDir}/config/quality/lint/lint.xml")
-      }
-    }
+//    if (extension.lint.lintConfig != null) {
+//      project.android.lintOptions {
+//        lintConfig project.file("${project.rootDir}/config/quality/lint/lint.xml")
+//      }
+//    }
 //
 //    if (extension.lint.checkReleaseBuilds != null) {
 //      subProject.android.lintOptions {

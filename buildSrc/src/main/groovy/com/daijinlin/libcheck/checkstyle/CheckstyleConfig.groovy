@@ -24,7 +24,7 @@ class CheckstyleConfig extends CommonConfig {
   CheckstyleConfig(Project project) { super(project) }
 
   File resolveSuppressionsFile() {
-    File file = new File(project.buildDir, "tmp/code-check/suppressions.xml")
+    File file = new File(project.buildDir, "config/code-check/suppressions.xml")
     file.parentFile.mkdirs()
     file.delete()
     file << resolveSuppressions()

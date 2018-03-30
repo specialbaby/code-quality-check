@@ -13,11 +13,7 @@ class CommonConfig {
 
   Boolean skip = null
 
-  void skip(boolean skip) { this.skip = skip }
-
   Boolean abortOnError = null
-
-  void abortOnError(boolean abortOnError) { this.abortOnError = abortOnError }
 
   private TextResource configResource = null
   private File configFile = null
@@ -74,8 +70,7 @@ class CommonConfig {
   }
 
   File resolveConfigFile(String code) {
-    File file = new File(project.buildDir, "tmp/code-check/${code}.xml")
-    file.parentFile.mkdirs()
+    File file = new File(project.buildDir, "tmp/${code}.xml")
     file.delete()
     file << resolveConfig(code)
     return file

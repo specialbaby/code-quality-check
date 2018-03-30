@@ -11,5 +11,7 @@ import org.gradle.api.Project
  * </pre>
  */
 class LintConfig extends CommonConfig {
+  boolean warningsAsErrors = false
+  boolean ignoreWarnings = true
   LintConfig(Project project) { super(project) }
 }

@@ -2,7 +2,6 @@ package com.daijinlin.libcheck.checkstyle
 
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
-import com.daijinlin.libcheck.common.L
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.Checkstyle
@@ -32,11 +31,9 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
 
     project.checkstyle {
       toolVersion = extension.mCheckstyleConfig.toolVersion
-      //configFile config
-      configFile project.file("${project.rootDir}/config/quality/checkstyle/checkstyle.xml")
-      configProperties.checkstyleSuppressionsPath = project.file("${project.rootDir}/config/quality/checkstyle/suppressions.xml").absolutePath
-      //configProperties.checkstyleSuppressionsPath = project.file(extension.mCheckstyleConfig.checkstyleSuppressionsPath).absolutePath
-      ignoreFailures extension.abortOnError
+      configFile config
+      configProperties.checkstyleSuppressionsPath = extension.mCheckstyleConfig.resolveSuppressionsFile()
+      ignoreFailures !extension.abortOnError
       // Whether this task will ignore failures and continue running the build.
       showViolations extension.mCheckstyleConfig.showViolations
       // Whether rule violations are to be displayed on the console.
@@ -66,16 +63,18 @@ class CheckstyleCheck extends CommonCheck<CheckstyleConfig> {
     if (xmlReportFile.exists()) {
       GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
       return xml.file.inject(0) { count, file -> count + file.error.size() } as int
-    } else if (htmlReportFile.exists()) {
-      //todo:解析html
-      return 123
+    } else {
+      return 0
     }
-    return 0
   }
 
   @Override
   protected String getErrorMessage(int errorCount, File xmlReportFile, File htmlReportFile) {
-    return "$errorCount Checkstyle rule violations were found. See the report at: ${htmlReportFile.toURI()}"
+    if (htmlReportFile.exists()) {
+      return "$errorCount Pmd rule violations were found. See the report at: ${htmlReportFile.toURI()}"
+    } else {
+      return "$errorCount Pmd rule violations were found. See the report at: ${xmlReportFile.toURI()}"
+    }
   }
 
 }

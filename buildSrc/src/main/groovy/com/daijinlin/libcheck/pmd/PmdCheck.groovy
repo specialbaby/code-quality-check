@@ -2,6 +2,7 @@ package com.daijinlin.libcheck.pmd
 
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
+import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.Pmd
 
@@ -25,12 +26,21 @@ class PmdCheck extends CommonCheck<PmdConfig> {
 
   @Override
   protected int getErrorCount(File xmlReportFile, File htmlReportFile) {
-    return 1
+    if (xmlReportFile.exists()) {
+      GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
+      return xml.file.inject(0) { count, file -> count + file.violation.size() }
+    } else {
+      return 0
+    }
   }
 
   @Override
   protected String getErrorMessage(int errorCount, File xmlReportFile, File htmlReportFile) {
-    return "$errorCount Pmd rule violations were found. See the report at: ${htmlReportFile.toURI()}"
+    if (htmlReportFile.exists()) {
+      return "$errorCount Pmd rule violations were found. See the report at: ${htmlReportFile.toURI()}"
+    } else {
+      return "$errorCount Pmd rule violations were found. See the report at: ${xmlReportFile.toURI()}"
+    }
   }
 
   @Override

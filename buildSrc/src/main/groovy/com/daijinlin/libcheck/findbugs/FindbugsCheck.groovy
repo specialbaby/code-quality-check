@@ -2,13 +2,10 @@ package com.daijinlin.libcheck.findbugs
 
 import com.daijinlin.libcheck.CodeCheckExtension
 import com.daijinlin.libcheck.common.CommonCheck
-import com.daijinlin.libcheck.common.L
 import com.daijinlin.libcheck.common.Utils
 import groovy.util.slurpersupport.GPathResult
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.plugins.quality.FindBugs
-import org.gradle.api.tasks.TaskState
 
 /**
  * <pre>
@@ -32,21 +29,18 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
     if (xmlReportFile.exists()) {
       GPathResult xml = new XmlSlurper().parseText(xmlReportFile.text)
       return xml.FindBugsSummary.getProperty('@total_bugs').text() as int
-    } else if (htmlReportFile.exists()) {
-//      def parser = new XmlSlurper()
-//      parser.setFeature("http://apache.org/xml/features/disallow-doctype-decl", false)
-//      parser.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-//      def html = parser.parseText(htmlReportFile.text)
-//      html.body.findAll() {
-//      }
-      return 123
+    } else {
+      return 0
     }
-    return 0
   }
 
   @Override
   protected String getErrorMessage(int errorCount, File xmlReportFile, File htmlReportFile) {
-    return "$errorCount FindBugs rule violations were found. See the report at: ${htmlReportFile.absolutePath}"
+    if (htmlReportFile.exists()) {
+      return "$errorCount Pmd rule violations were found. See the report at: ${htmlReportFile.toURI()}"
+    } else {
+      return "$errorCount Pmd rule violations were found. See the report at: ${xmlReportFile.toURI()}"
+    }
   }
 
   @Override
@@ -61,7 +55,7 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
       excludeFilter = configFile
     }
 
-    project.task('findbugs', type: FindBugs, dependsOn: 'assemble') {
+    project.task('findbugs', type: FindBugs) {
       description = this.taskDescription
       group = this.taskGroup
 
@@ -87,4 +81,5 @@ class FindbugsCheck extends CommonCheck<FindbugsConfig> {
       }
     }
   }
+
 }
