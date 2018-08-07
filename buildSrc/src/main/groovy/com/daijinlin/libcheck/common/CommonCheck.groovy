@@ -43,7 +43,7 @@ abstract class CommonCheck<Config extends CommonConfig> implements TaskExecution
     extension = target.extensions.findByType(CodeCheckExtension)
     final String name = target.name
     target.gradle.addListener(this)
-    if (extension.excludeProjects.contains(name) || extension.skip) { // 如果项目在忽略列表中则直接跳过
+    if (extension.excludeProjects?.contains(name) || extension.skip) { // 如果项目在忽略列表中则直接跳过
       L.d("skip project $name")
       return
     }

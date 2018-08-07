@@ -71,6 +71,7 @@ class CommonConfig {
 
   File resolveConfigFile(String code) {
     File file = new File(project.buildDir, "tmp/${code}.xml")
+    file.parentFile.mkdirs()
     file.delete()
     file << resolveConfig(code)
     return file

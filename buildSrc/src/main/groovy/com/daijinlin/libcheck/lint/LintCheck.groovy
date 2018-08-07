@@ -40,17 +40,26 @@ class LintCheck extends CommonCheck {
   @Override
   protected void performCheck(Project project, List sources, File configFile, File xmlReportFile, File htmlReportFile) {
     project.tasks.getByName('check').dependsOn taskName
-    project.android.lintOptions {
-      L.d("lintOptions")
-      warningsAsErrors extension.mLintConfig.warningsAsErrors
-      abortOnError extension.abortOnError
-      ignoreWarnings extension.mLintConfig.ignoreWarnings
-      xmlReport extension.xmlReports
-      xmlOutput xmlReportFile
-      htmlReport extension.htmlReports
-      htmlOutput htmlReportFile
-      lintConfig configFile
-    }
+
+    def newOptions = project.android.lintOptions
+
+    newOptions.warningsAsErrors = extension.mLintConfig.warningsAsErrors
+    newOptions.abortOnError = extension.abortOnError
+    newOptions.htmlReport = extension.htmlReports
+    newOptions.htmlOutput = htmlReportFile
+    newOptions.xmlReport = extension.xmlReports
+
+//    project.android.lintOptions {
+//      L.d("lintOptions")
+//      warningsAsErrors extension.mLintConfig.warningsAsErrors
+//      abortOnError extension.abortOnError
+//      ignoreWarnings extension.mLintConfig.ignoreWarnings
+//      xmlReport extension.xmlReports
+//      xmlOutput xmlReportFile
+//      htmlReport extension.htmlReports
+//      htmlOutput htmlReportFile
+//      lintConfig configFile
+//    }
 
 //    if (extension.lint.checkAllWarnings != null) {
 //      subProject.android.lintOptions {

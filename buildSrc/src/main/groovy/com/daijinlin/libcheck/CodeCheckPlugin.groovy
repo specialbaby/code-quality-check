@@ -24,7 +24,7 @@ class CodeCheckPlugin implements Plugin<Project> {
     if (hasSubProjects) {
       project.subprojects { subProject ->
         subProject.afterEvaluate {
-
+          handleCheck(subProject)
         }
       }
     } else {
@@ -38,9 +38,9 @@ class CodeCheckPlugin implements Plugin<Project> {
     new CheckstyleCheck().apply(project)
     new FindbugsCheck().apply(project)
     new PmdCheck().apply(project)
-    //if (Utils.isAndroidProject(project) || Utils.isKotlinProject(project)) {
-//    new LintCheck().apply(project)
-    //}
+    if (Utils.isAndroidProject(project)) {
+      new LintCheck().apply(project)
+    }
   }
 
 }
