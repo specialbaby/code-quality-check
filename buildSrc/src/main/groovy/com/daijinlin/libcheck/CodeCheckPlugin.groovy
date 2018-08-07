@@ -34,12 +34,12 @@ class CodeCheckPlugin implements Plugin<Project> {
     }
   }
 
-  private void handleCheck(Project project) {
+  private static void handleCheck(Project project) {
     new CheckstyleCheck().apply(project)
     new FindbugsCheck().apply(project)
     new PmdCheck().apply(project)
     //if (Utils.isAndroidProject(project) || Utils.isKotlinProject(project)) {
-    new LintCheck().apply(project)
+//    new LintCheck().apply(project)
     //}
   }
 

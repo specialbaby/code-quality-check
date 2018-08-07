@@ -1,3 +1,3 @@
-include ':app', ':buildSrc'
-include 'javatest'
+include ':app'//, ':buildSrc'
+//include 'javatest'
 
