@@ -80,7 +80,7 @@ pmd {
 task pmd(type: Pmd, group: 'verification') {
     source 'src'
     include '**/*.java'
-    exclude('**/gen/**', '**/debug/**')
+    exclude('**/gen/**', '**/debug.sh/**')
 
     reports {
         xml.enabled = false

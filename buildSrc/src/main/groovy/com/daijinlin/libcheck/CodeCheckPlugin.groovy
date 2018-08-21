@@ -1,6 +1,7 @@
 package com.daijinlin.libcheck
 
 import com.daijinlin.libcheck.checkstyle.CheckstyleCheck
+import com.daijinlin.libcheck.common.L
 import com.daijinlin.libcheck.common.Utils
 import com.daijinlin.libcheck.findbugs.FindbugsCheck
 import com.daijinlin.libcheck.lint.LintCheck
@@ -24,11 +25,13 @@ class CodeCheckPlugin implements Plugin<Project> {
     if (hasSubProjects) {
       project.subprojects { subProject ->
         subProject.afterEvaluate {
+          L.d("subProject")
           handleCheck(subProject)
         }
       }
     } else {
       project.afterEvaluate {
+        L.d("project")
         handleCheck(project)
       }
     }
